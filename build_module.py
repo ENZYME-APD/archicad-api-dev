@@ -12,7 +12,7 @@ Usage:
     build_module.py
 
 Author:
-    Kaushik LS - 04.08.2022
+    Kaushik LS - 18.08.2022
 
 Source:
     https://gist.github.com/thekaushikls/58a0727a86fb2e74121a782e123d163e
@@ -64,16 +64,16 @@ class Compiler:
         """
         files = []
         # Ignore the current file, and files named '__init__.py'. Add other names if required.
-        ignore_list = (__file__, "__init__.py")
+        ignore_list = (os.path.basename(__file__), "__init__.py", "local", "bin")
 
         if os.path.isdir(folder_path):
             for file in os.listdir(folder_path):
                 abs_path = os.path.join(folder_path, file)
                 # ignore from ignore_list.
-                if not abs_path in ignore_list and file.endswith(".py"):
+                if not file in ignore_list and file.endswith(".py"):
                     files.append(abs_path)
                 # Recursiion for sub-folders
-                elif os.path.isdir(abs_path) and abs_path.lower() not in ignore_list:
+                elif os.path.isdir(abs_path) and file.lower() not in ignore_list:
                     files += Compiler.collect_files(abs_path)
         
         return files
@@ -100,7 +100,7 @@ class Compiler:
             os.makedirs(target_folder)
         
         # Collect necessary files from project folder.
-        program_files = Compiler.collect_files(os.path.join(folder_name, 'tapir'))
+        program_files = Compiler.collect_files(folder_name)
 
         try:
             from clr import CompileModules

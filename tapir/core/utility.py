@@ -11,7 +11,7 @@ class dotNETBase(object):
         raise NotImplementedError('Abstract base class cannot be instantiated.')
     
     def __str__(self):
-        pass
+        raise NotImplementedError('Abstract method cannot be called.')
     
     def __repr__(self):
         return self.__str__()
@@ -20,10 +20,10 @@ class dotNETBase(object):
         return self.__str__()
     
     def ToJSON(self):
-        pass
+        raise NotImplementedError('Abstract method cannot be called.')
 
-    def FromJSON(self):
-        pass
+    def FromJSON(self, json_data):
+        raise NotImplementedError('Abstract method cannot be called.')
 
     def GetType(self):
         return self.__class__.__name__

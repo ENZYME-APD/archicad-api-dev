@@ -1,0 +1,38 @@
+#include "APIEnvir.h"
+#include "ACAPinc.h"
+
+#include "ResourceIds.hpp"
+#include "Commands.hpp"
+
+API_AddonType __ACDLL_CALL CheckEnvironment (API_EnvirParams* envir)
+{
+    RSGetIndString (&envir->addOnInfo.name, ID_ADDON_INFO, ID_ADDON_INFO_NAME, ACAPI_GetOwnResModule ());
+    RSGetIndString (&envir->addOnInfo.description, ID_ADDON_INFO, ID_ADDON_INFO_DESC, ACAPI_GetOwnResModule ());
+
+    return APIAddon_Preload;
+}
+
+GSErrCode __ACDLL_CALL RegisterInterface (void)
+{
+    return NoError;
+}
+
+GSErrCode __ACENV_CALL Initialize (void)
+{
+    GSErrCode err = ACAPI_Install_AddOnCommandHandler (GS::NewOwned<PublishCommand> ());
+    err |= ACAPI_Install_AddOnCommandHandler (GS::NewOwned<TeamworkReceiveCommand> ());
+    err |= ACAPI_Install_AddOnCommandHandler (GS::NewOwned<GetProjectInfoCommand> ());
+    err |= ACAPI_Install_AddOnCommandHandler (GS::NewOwned<GetArchicadLocationCommand> ());
+    err |= ACAPI_Install_AddOnCommandHandler (GS::NewOwned<QuitCommand> ());
+    err |= ACAPI_Install_AddOnCommandHandler (GS::NewOwned<ReloadLibrariesCommand> ());
+    err |= ACAPI_Install_AddOnCommandHandler (GS::NewOwned<MoveElementsCommand> ());
+    err |= ACAPI_Install_AddOnCommandHandler (GS::NewOwned<CreateColumnsCommand> ());
+    err |= ACAPI_Install_AddOnCommandHandler (GS::NewOwned<GetHotlinksCommand> ());
+
+    return NoError;
+}
+
+GSErrCode __ACENV_CALL FreeData (void)
+{
+    return NoError;
+}

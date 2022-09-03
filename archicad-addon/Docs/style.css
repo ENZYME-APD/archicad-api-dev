@@ -1,0 +1,63 @@
+html, body
+{
+	color: #000000;
+	background: #fafafa;
+	font-size: 16px;
+	font-family: Arial, Helvetica, sans-serif;
+	scroll-behavior: smooth;
+	margin: 10px;
+	padding: 0px;
+}
+
+div.frame
+{
+	padding: 25px;
+	width: 920px;
+	margin: 0px auto;
+	overflow: auto;
+    box-shadow: 0px 0px 10px #dddddd;
+    border-radius: 3px;
+}
+
+div.title
+{
+    font-size: 1.7em;
+    margin-bottom: 1.0em;
+}
+
+div.command_name
+{
+    font-size: 1.4em;
+    margin-top: 1.5em;
+}
+
+div.command_container
+{
+    padding-left: 1.0em;
+    border-left: 1px solid #dddddd;
+}
+
+div.command_description
+{
+    margin: 1.5em 0;
+}
+
+div.scheme_title
+{
+    font-size: 1.2em;
+}
+
+div.scheme_container
+{
+    margin: 1.5em 0;
+}
+
+@media only screen and (max-width: 1000px)
+{
+
+div.frame
+{
+	width: auto;
+}
+
+}

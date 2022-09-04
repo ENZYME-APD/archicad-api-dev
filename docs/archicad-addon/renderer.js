@@ -59,7 +59,7 @@ function RenderCommand (parentElement, command)
     commandContent.style.display = 'none';
     
     let isGenerated = false;
-    parentElement.addEventListener ('click', () => {
+    nameElement.addEventListener ('click', () => {
         if (!isGenerated) {
             CreateElement (commandContent, 'div', 'command_description', command.description);
             CreateSchemaElement (commandContent, 'Input parameters', command.inputScheme);

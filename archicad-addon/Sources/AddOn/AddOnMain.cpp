@@ -1,6 +1,7 @@
 #include "APIEnvir.h"
 #include "ACAPinc.h"
 
+#include "AddOnVersion.hpp"
 #include "ResourceIds.hpp"
 #include "ApplicationCommands.hpp"
 #include "ProjectCommands.hpp"
@@ -10,7 +11,7 @@ API_AddonType __ACDLL_CALL CheckEnvironment (API_EnvirParams* envir)
 {
     RSGetIndString (&envir->addOnInfo.name, ID_ADDON_INFO, ID_ADDON_INFO_NAME, ACAPI_GetOwnResModule ());
     RSGetIndString (&envir->addOnInfo.description, ID_ADDON_INFO, ID_ADDON_INFO_DESC, ACAPI_GetOwnResModule ());
-
+    envir->addOnInfo.description += GS::UniString (" ") + ADDON_VERSION;
     return APIAddon_Preload;
 }
 

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+
+	<title>Tapir Additional JSON Commands</title>
+
+    <link rel="stylesheet" type="text/css" href="json-schema-viewer-js/json-schema-view-js.min.css">
+    <script type="text/javascript" src="json-schema-viewer-js/json-schema-view-js.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script type="text/javascript" src="renderer.js"></script>
+    <script type="text/javascript" src="commands.js"></script>
+    
+    <script type="text/javascript">
+        
+    </script>
+</head>
+
+<body>
+    <div class="header">
+        <div class="header_frame">
+            <div class="title">Tapir Additional JSON Commands</div>
+        </div>
+    </div>
+    <div class="frame">
+        <div id="commands">
+            <script type="text/javascript">
+                let commandsDiv = document.getElementById ('commands');
+                RenderCommands (commandsDiv, commands);
+            </script>
+        </div>
+    </div>
+</body>
+
+</html>

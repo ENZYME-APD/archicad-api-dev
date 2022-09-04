@@ -1,6 +1,7 @@
 ﻿var commands = [
     {
         name : 'GetArchicadLocation',
+        version : '0.1.0',
         description : 'Retrieves the location of the currently running Archicad executable.',
         inputScheme : null,
         outputScheme : {
@@ -20,12 +21,14 @@
     },
     {
         name : 'QuitArchicad',
+        version : '0.1.0',
         description : 'Performs a quit operation on the currently running Archicad instance.',
         inputScheme : null,
         outputScheme : null
     },
     {
         name : 'GetProjectInfo',
+        version : '0.1.0',
         description : 'Retrieves information about the currently loaded project.',
         inputScheme : null,
         outputScheme : {
@@ -61,5 +64,48 @@
                 "isTeamwork"
             ]
         }
-    }
+    },
+    {
+        name : 'GetHotlinks',
+        version : '0.1.0',
+        description : 'Gets the file system locations (path) of the hotlink modules. The hotlinks can have tree hierarchy in the project.',
+        inputScheme : null,
+        outputScheme : {
+            "Hotlinks": {
+              "type": "array",
+              "description": "A list of hotlink nodes.",
+              "items": {
+                "$ref": "#/Hotlink"
+              }
+            },
+            "Hotlink": {
+              "type": "object",
+              "description": "The details of a hotlink node.",
+              "properties": {
+                "location": {
+                  "type": "string",
+                  "description": "The path of the hotlink file."
+                },
+                "children": {
+                  "$ref": "#/Hotlinks",
+                  "description": "The children of the hotlink node if it has any."
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "location"
+              ]
+            },
+            "type": "object",
+            "properties": {
+                "hotlinks": {
+                    "$ref": "#/Hotlinks"
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "hotlinks"
+            ]
+        }
+    },
 ];

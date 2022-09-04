@@ -69,3 +69,110 @@ GS::ObjectState GetProjectInfoCommand::Execute (const GS::ObjectState& /*paramet
 
     return response;
 }
+
+GS::String GetHotlinksCommand::GetName () const
+{
+    return "GetHotlinks";
+}
+
+GS::Optional<GS::UniString> GetHotlinksCommand::GetSchemaDefinitions () const
+{
+    return R"({
+        "Hotlinks": {
+          "type": "array",
+          "description": "A list of hotlink nodes.",
+          "items": {
+            "$ref": "#/Hotlink"
+          }
+        },
+        "Hotlink": {
+          "type": "object",
+          "description": "The details of a hotlink node.",
+          "properties": {
+            "location": {
+              "type": "string",
+              "description": "The path of the hotlink file."
+            },
+            "children": {
+              "$ref": "#/Hotlinks",
+              "description": "The children of the hotlink node if it has any."
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "location"
+          ]
+        }
+    })";
+}
+
+GS::Optional<GS::UniString> GetHotlinksCommand::GetResponseSchema () const
+{
+    return R"({
+        "type": "object",
+        "properties": {
+            "hotlinks": {
+                "$ref": "#/Hotlinks"
+            }
+        },
+        "additionalProperties": false,
+        "required": [
+            "hotlinks"
+        ]
+    })";
+}
+
+static GS::Optional<GS::UniString>    GetLocationOfHotlink (const API_Guid& hotlinkGuid)
+{
+    API_HotlinkNode hotlinkNode = {};
+    hotlinkNode.guid = hotlinkGuid;
+
+    ACAPI_Database (APIDb_GetHotlinkNodeID, &hotlinkNode);
+
+    if (hotlinkNode.sourceLocation == nullptr) {
+        return GS::NoValue;
+    }
+
+    return hotlinkNode.sourceLocation->ToDisplayText ();
+}
+
+static GS::ObjectState DumpHotlinkWithChildren (const API_Guid& hotlinkGuid,
+                                                 GS::HashTable<API_Guid, GS::Array<API_Guid>>& hotlinkTree)
+{
+    GS::ObjectState hotlinkNodeOS;
+
+    const auto& location = GetLocationOfHotlink (hotlinkGuid);
+    if (location.HasValue ()) {
+        hotlinkNodeOS.Add ("location", location.Get ());
+    }
+
+    const auto& children = hotlinkTree.Retrieve (hotlinkGuid);
+    if (!children.IsEmpty ()) {
+        const auto& listAdder = hotlinkNodeOS.AddList<GS::ObjectState> ("children");
+        for (const API_Guid& childNodeGuid : hotlinkTree.Retrieve (hotlinkGuid)) {
+            listAdder (DumpHotlinkWithChildren (childNodeGuid, hotlinkTree));
+        }
+    }
+
+    return hotlinkNodeOS;
+}
+
+GS::ObjectState GetHotlinksCommand::Execute (const GS::ObjectState& /*parameters*/, GS::ProcessControl& /*processControl*/) const
+{
+    GS::ObjectState response;
+    const auto& listAdder = response.AddList<GS::ObjectState> ("hotlinks");
+
+    for (API_HotlinkTypeID type : {APIHotlink_Module, APIHotlink_XRef}) {
+        API_Guid hotlinkRootNodeGuid = APINULLGuid;
+        if (ACAPI_Database (APIDb_GetHotlinkRootNodeGuidID, &type, &hotlinkRootNodeGuid) == NoError) {
+            GS::HashTable<API_Guid, GS::Array<API_Guid>> hotlinkTree;
+            if (ACAPI_Database (APIDb_GetHotlinkNodeTreeID, &hotlinkRootNodeGuid, &hotlinkTree) == NoError) {
+                for (const API_Guid& childNodeGuid : hotlinkTree.Retrieve (hotlinkRootNodeGuid)) {
+                    listAdder (DumpHotlinkWithChildren (childNodeGuid, hotlinkTree));
+                }
+            }
+        }
+    }
+
+    return response;
+}

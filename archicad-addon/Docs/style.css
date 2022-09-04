@@ -5,8 +5,13 @@ html, body
 	font-size: 16px;
 	font-family: Arial, Helvetica, sans-serif;
 	scroll-behavior: smooth;
-	margin: 10px;
+	margin: 0px;
 	padding: 0px;
+}
+
+div.header
+{
+    box-shadow: 0px 0px 10px #dddddd;
 }
 
 div.frame
@@ -15,20 +20,24 @@ div.frame
 	width: 920px;
 	margin: 0px auto;
 	overflow: auto;
-    box-shadow: 0px 0px 10px #dddddd;
-    border-radius: 3px;
 }
 
 div.title
 {
-    font-size: 1.7em;
-    margin-bottom: 1.0em;
+    font-size: 1.6em;
 }
 
 div.command_name
 {
     font-size: 1.4em;
     margin-top: 1.5em;
+}
+
+span.command_version
+{
+    color: #aaaaaa;
+    font-size: 0.6em;
+    margin-left: 0.5em;
 }
 
 div.command_container
@@ -49,7 +58,7 @@ div.scheme_title
 
 div.scheme_container
 {
-    margin: 1.5em 0;
+    margin: 1.0em 0;
 }
 
 @media only screen and (max-width: 1000px)

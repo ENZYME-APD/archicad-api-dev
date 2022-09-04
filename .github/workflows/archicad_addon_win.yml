@@ -13,7 +13,7 @@ jobs:
     - name: Download Development Kit
       run: python archicad-addon/Tools/download_and_unzip.py ${{ secrets.WIN_DEVKIT_AC26 }} archicad-addon/Tools/Build
     - name: Generate Project
-      run: cmake -B archicad-addon/Tools/Build/AC26 -G "Visual Studio 16 2019" -A "x64" -T "v142" -DAC_API_DEVKIT_DIR="archicad-addon/Build/AC26/API Development Kit 26.3000" archicad-addon
+      run: cmake -B archicad-addon/Tools/Build/AC26 -G "Visual Studio 16 2019" -A "x64" -T "v142" -DAC_API_DEVKIT_DIR="archicad-addon/Build/API Development Kit 26.3000" archicad-addon
     - name: Build Debug
       run: cmake --build archicad-addon/Build/AC26 --config Debug
     - name: Build RelWithDebInfo

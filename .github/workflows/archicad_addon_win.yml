@@ -2,7 +2,7 @@ name: Archicad Add-On Windows Build
 
 on:
   push:
-    branches: [ archicad-addon ]
+    branches: [ main ]
 
 jobs:
   build_ac26:

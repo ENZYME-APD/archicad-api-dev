@@ -47,19 +47,20 @@ function CreateSchemaElement (parentElement, title, schema)
     CreateElement (parentElement, 'div', 'scheme_title', title);    
     let schemeContainer = CreateElement (parentElement, 'div', 'scheme_container', null);
     ResolveReferences (schema, schema, 'properties', new Set ());
-    let view = new JSONSchemaView (schema, 1);
+    let view = new JSONSchemaView (schema);
     schemeContainer.appendChild (view.render ());
 }
 
 function RenderCommand (parentElement, command)
 {
-    let nameElement = CreateElement (parentElement, 'div', 'command_name', command.name);
-    CreateElement (nameElement, 'span', 'command_version', command.version);
+    let headerElement = CreateElement (parentElement, 'div', 'command_header', null);
+    CreateElement (headerElement, 'span', 'command_name', command.name);
+    CreateElement (headerElement, 'span', 'command_version', command.version);
     let commandContent = CreateElement (parentElement, 'div', 'command_content', null);
     commandContent.style.display = 'none';
     
     let isGenerated = false;
-    nameElement.addEventListener ('click', () => {
+    headerElement.addEventListener ('click', () => {
         if (!isGenerated) {
             CreateElement (commandContent, 'div', 'command_description', command.description);
             CreateSchemaElement (commandContent, 'Input parameters', command.inputScheme);
@@ -76,8 +77,11 @@ function RenderCommand (parentElement, command)
 
 function RenderCommands (parentElement, commands)
 {
-    for (let command of commands) {
-        let commandContainer = CreateElement (parentElement, 'div', 'command_container', null);
-        RenderCommand (commandContainer, command);
+    for (let group of commands) {
+        CreateElement (parentElement, 'div', 'group_name', group.name);
+        for (command of group.commands) {
+            let commandContainer = CreateElement (parentElement, 'div', 'command_container', null);
+            RenderCommand (commandContainer, command);
+        }
     }
 }

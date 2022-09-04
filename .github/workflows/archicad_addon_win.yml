@@ -2,7 +2,10 @@ name: Archicad Add-On Windows Build
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+    paths:
+      - 'archicad-addon/**'
 
 jobs:
   build_win_ac25:

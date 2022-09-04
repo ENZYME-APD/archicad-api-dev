@@ -5,5 +5,5 @@ conn = ACConnection.connect ()
 acc = conn.commands
 act = conn.types
 
-response = acc.ExecuteAddOnCommand (act.AddOnCommandId ('TapirCommand', 'GetHotlinks'))
+response = acc.ExecuteAddOnCommand (act.AddOnCommandId ('TapirCommand', 'GetAddOnVersion'))
 print (response)

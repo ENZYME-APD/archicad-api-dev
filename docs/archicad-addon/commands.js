@@ -1,8 +1,28 @@
 ﻿var commands = [
     {
-        name : 'GetArchicadLocation',
-        version : '0.1.0',
-        description : 'Retrieves the location of the currently running Archicad executable.',
+        name : "GetAddOnVersion",
+        version : "0.1.0",
+        description : "Retrieves the version of the Tapir Additional JSON Commands Add-On.",
+        inputScheme : null,
+        outputScheme : {
+            "type": "object",
+            "properties": {
+                "version": {
+                    "type": "string",
+                    "description": "Version number in the form of \"1.1.1\".",
+                    "minLength": 1
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "version"
+            ]
+        }
+    },
+    {
+        name : "GetArchicadLocation",
+        version : "0.1.0",
+        description : "Retrieves the location of the currently running Archicad executable.",
         inputScheme : null,
         outputScheme : {
             "type": "object",
@@ -20,16 +40,16 @@
         }
     },
     {
-        name : 'QuitArchicad',
-        version : '0.1.0',
-        description : 'Performs a quit operation on the currently running Archicad instance.',
+        name : "QuitArchicad",
+        version : "0.1.0",
+        description : "Performs a quit operation on the currently running Archicad instance.",
         inputScheme : null,
         outputScheme : null
     },
     {
-        name : 'GetProjectInfo',
-        version : '0.1.0',
-        description : 'Retrieves information about the currently loaded project.',
+        name : "GetProjectInfo",
+        version : "0.1.0",
+        description : "Retrieves information about the currently loaded project.",
         inputScheme : null,
         outputScheme : {
             "type": "object",
@@ -66,9 +86,9 @@
         }
     },
     {
-        name : 'GetHotlinks',
-        version : '0.1.0',
-        description : 'Gets the file system locations (path) of the hotlink modules. The hotlinks can have tree hierarchy in the project.',
+        name : "GetHotlinks",
+        version : "0.1.0",
+        description : "Gets the file system locations (path) of the hotlink modules. The hotlinks can have tree hierarchy in the project.",
         inputScheme : null,
         outputScheme : {
             "Hotlinks": {

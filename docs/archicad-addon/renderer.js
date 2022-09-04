@@ -41,8 +41,8 @@ function ResolveReferences (schema, parentNode, parentKey, resolvedKeys)
 
 function CreateCommandNameElement (parentElement, commandName, commandVersion)
 {
-    let nameElement = CreateElement (parentElement, 'div', 'command_name', commandName);
-    CreateElement (nameElement, 'span', 'command_version', commandVersion);
+    CreateElement (parentElement, 'div', 'command_name', commandName);
+    CreateElement (parentElement, 'div', 'command_version', 'From version ' + commandVersion);
 }
 
 function CreateSchemaElement (parentElement, title, schema)

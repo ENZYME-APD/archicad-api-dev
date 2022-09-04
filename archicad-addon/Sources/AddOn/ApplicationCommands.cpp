@@ -1,6 +1,35 @@
 #include "ApplicationCommands.hpp"
 #include "ObjectState.hpp"
 #include "FileSystem.hpp"
+#include "AddOnVersion.hpp"
+
+GS::String GetAddOnVersionCommand::GetName () const
+{
+    return "GetAddOnVersion";
+}
+
+GS::Optional<GS::UniString> GetAddOnVersionCommand::GetResponseSchema () const
+{
+    return R"({
+        "type": "object",
+        "properties": {
+            "version": {
+                "type": "string",
+                "description": "Version number in the form of \"1.1.1\".",
+                "minLength": 1
+            }
+        },
+        "additionalProperties": false,
+        "required": [
+            "version"
+        ]
+    })";
+}
+
+GS::ObjectState GetAddOnVersionCommand::Execute (const GS::ObjectState& /*parameters*/, GS::ProcessControl& /*processControl*/) const
+{
+    return GS::ObjectState ("version", ADDON_VERSION);
+}
 
 GS::String GetArchicadLocationCommand::GetName () const
 {

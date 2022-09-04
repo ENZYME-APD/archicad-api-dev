@@ -23,10 +23,11 @@ GSErrCode __ACDLL_CALL RegisterInterface (void)
 GSErrCode __ACENV_CALL Initialize (void)
 {
     GSErrCode err = ACAPI_Install_AddOnCommandHandler (GS::NewOwned<PublishCommand> ());
-    err |= ACAPI_Install_AddOnCommandHandler (GS::NewOwned<TeamworkReceiveCommand> ());
-    err |= ACAPI_Install_AddOnCommandHandler (GS::NewOwned<GetProjectInfoCommand> ());
+    err |= ACAPI_Install_AddOnCommandHandler (GS::NewOwned<GetAddOnVersionCommand> ());
     err |= ACAPI_Install_AddOnCommandHandler (GS::NewOwned<GetArchicadLocationCommand> ());
     err |= ACAPI_Install_AddOnCommandHandler (GS::NewOwned<QuitArchicadCommand> ());
+    err |= ACAPI_Install_AddOnCommandHandler (GS::NewOwned<TeamworkReceiveCommand> ());
+    err |= ACAPI_Install_AddOnCommandHandler (GS::NewOwned<GetProjectInfoCommand> ());
     err |= ACAPI_Install_AddOnCommandHandler (GS::NewOwned<ReloadLibrariesCommand> ());
     err |= ACAPI_Install_AddOnCommandHandler (GS::NewOwned<MoveElementsCommand> ());
     err |= ACAPI_Install_AddOnCommandHandler (GS::NewOwned<CreateColumnsCommand> ());

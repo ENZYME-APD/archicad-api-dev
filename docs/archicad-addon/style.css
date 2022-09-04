@@ -39,11 +39,11 @@ div.command_name
     margin-top: 1.5em;
 }
 
-span.command_version
+div.command_version
 {
     color: #aaaaaa;
-    font-size: 0.6em;
-    margin-left: 0.5em;
+    font-size: 0.7em;
+    margin-top: 0.2em;
 }
 
 div.command_container

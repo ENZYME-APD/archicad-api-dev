@@ -1,9 +1,5 @@
 name: Archicad Add-On Mac Build
 
-on:
-  push:
-    branches: [ main ]
-
 jobs:
   build_mac_ac26:
     runs-on: [ macos-12 ]

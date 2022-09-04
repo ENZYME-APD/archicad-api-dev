@@ -39,12 +39,6 @@ function ResolveReferences (schema, parentNode, parentKey, resolvedKeys)
     }
 }
 
-function CreateCommandNameElement (parentElement, commandName, commandVersion)
-{
-    CreateElement (parentElement, 'div', 'command_name', commandName);
-    CreateElement (parentElement, 'div', 'command_version', 'From version ' + commandVersion);
-}
-
 function CreateSchemaElement (parentElement, title, schema)
 {
     if (schema === null) {
@@ -59,16 +53,31 @@ function CreateSchemaElement (parentElement, title, schema)
 
 function RenderCommand (parentElement, command)
 {
-    CreateCommandNameElement (parentElement, command.name, command.version);
-    let commandContainer = CreateElement (parentElement, 'div', 'command_container', null);
-    CreateElement (commandContainer, 'div', 'command_description', command.description);
-    CreateSchemaElement (commandContainer, 'Input parameters', command.inputScheme);
-    CreateSchemaElement (commandContainer, 'Output parameters', command.outputScheme);
+    let nameElement = CreateElement (parentElement, 'div', 'command_name', command.name);
+    CreateElement (nameElement, 'span', 'command_version', command.version);
+    let commandContent = CreateElement (parentElement, 'div', 'command_content', null);
+    commandContent.style.display = 'none';
+    
+    let isGenerated = false;
+    parentElement.addEventListener ('click', () => {
+        if (!isGenerated) {
+            CreateElement (commandContent, 'div', 'command_description', command.description);
+            CreateSchemaElement (commandContent, 'Input parameters', command.inputScheme);
+            CreateSchemaElement (commandContent, 'Output parameters', command.outputScheme);
+            isGenerated = true;
+        }
+        if (commandContent.style.display === 'block') {
+            commandContent.style.display = 'none';
+        } else {
+            commandContent.style.display = 'block';
+        }
+    });
 }
 
 function RenderCommands (parentElement, commands)
 {
     for (let command of commands) {
-        RenderCommand (parentElement, command);
+        let commandContainer = CreateElement (parentElement, 'div', 'command_container', null);
+        RenderCommand (commandContainer, command);
     }
 }

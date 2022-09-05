@@ -6,7 +6,8 @@ on:
       - main
     paths:
       - 'archicad-addon/**'
-
+      - '.github/workflows/**'
+        
 jobs:
   build_mac_ac25:
     runs-on: [ macos-12 ]

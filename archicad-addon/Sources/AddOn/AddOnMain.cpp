@@ -33,7 +33,7 @@ GSErrCode __ACENV_CALL Initialize (void)
     err |= ACAPI_Install_AddOnCommandHandler (GS::NewOwned<CreateColumnsCommand> ());
     err |= ACAPI_Install_AddOnCommandHandler (GS::NewOwned<GetHotlinksCommand> ());
 
-    return NoError;
+    return err;
 }
 
 GSErrCode __ACENV_CALL FreeData (void)

@@ -157,17 +157,3 @@ class Command(dotNETBase):
             return response.classification_systems()
         else:
             raise response.exception
-
-    def GetElementsByClassification(self, elementClassification):
-        eleemnts = []
-        command_name = 'GetElementsByClassification'
-        cmd = { 'command' : 'API:{}'.format(command_name),
-        'parameters' : { 'elementClassification' : elementClassification}}
-
-# RUNSCRIPT
-
-if __name__ == '__main__':
-
-    archicad = Command.create()
-    beams = archicad.GetAllElements()
-    print(beams)

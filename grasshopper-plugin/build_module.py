@@ -64,7 +64,7 @@ class Compiler:
         """
         files = []
         # Ignore the current file, and files named '__init__.py'. Add other names if required.
-        ignore_list = (os.path.basename(__file__), "__init__.py", "local", "bin")
+        ignore_list = (os.path.basename(__file__), "__init__.py", "local", "bin", "setup.py")
 
         if os.path.isdir(folder_path):
             for file in os.listdir(folder_path):
@@ -101,6 +101,8 @@ class Compiler:
         
         # Collect necessary files from project folder.
         program_files = Compiler.collect_files(folder_name)
+
+        for file in program_files: print(file)
 
         try:
             from clr import CompileModules

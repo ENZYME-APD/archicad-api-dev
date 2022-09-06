@@ -5,12 +5,16 @@ __all__ = ['Link', 'Parameter', 'Command', 'CommandResult']
 
 # - - - - - - - - BUILT-IN IMPORTS
 import json
-import urllib2
 import time
+import sys
+if sys.version_info.major == 3:
+    from urllib.request import urlopen, Request
+else:
+    from urllib2 import urlopen, Request
 
 # - - - - - - - - LOCAL IMPORTS
-from utility import dotNETBase
-from members import Element
+from archicad.utility import dotNETBase
+from archicad.members import Element, ClassificationSystem
 
 # - - - - - - - - CLASS LIBRARY
 
@@ -49,11 +53,11 @@ class Link(dotNETBase):
         return Command(self).IsAlive()
 
     def post(self, data):
-        connection_object = urllib2.Request(self.address)
+        connection_object = Request(self.address)
         connection_object.add_header('Content-Type', 'application/json')
         
         start_time = time.time()
-        response = urllib2.urlopen(connection_object, json.dumps(data).encode('utf8'))
+        response = urlopen(connection_object, json.dumps(data).encode('utf8'))
         print('Completed in {:.3f} seconds'.format(time.time() - start_time))
         return CommandResult(response.read())
 
@@ -68,6 +72,9 @@ class CommandResult(dotNETBase):
         self.result = self._data.get('result', {})
         self.error = self._data.get('error', {})
 
+    def classification_systems(self):
+        return ClassificationSystem.from_command_result(self.result)
+    
     def exception(self):
         if self.error is None:
             return ConnectionError('{}:\n{}'.format(self.error['code'], self.error['message']))
@@ -142,3 +149,25 @@ class Command(dotNETBase):
             return response.result["version"], response.result["buildNumber"], response.result["languageCode"]
         else:
             raise response.exception
+
+    def GetAllClassificationSystems(self):
+        cmd = {'command' : 'API.GetAllClassificationSystems'}
+        response = self.link.post(cmd)
+        if response.success:
+            return response.classification_systems()
+        else:
+            raise response.exception
+
+    def GetElementsByClassification(self, elementClassification):
+        eleemnts = []
+        command_name = 'GetElementsByClassification'
+        cmd = { 'command' : 'API:{}'.format(command_name),
+        'parameters' : { 'elementClassification' : elementClassification}}
+
+# RUNSCRIPT
+
+if __name__ == '__main__':
+
+    archicad = Command.create()
+    beams = archicad.GetAllElements()
+    print(beams)

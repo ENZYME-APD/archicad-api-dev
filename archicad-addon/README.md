@@ -2,6 +2,12 @@
 
 This is the source code of an Archicad Add-On that registers several additional JSON commands in Archicad. The code is based on the amazing work of Tibor Lorantfy on [archicad-additional-json-commands](https://github.com/tlorantfy/archicad-additional-json-commands).
 
+## How to use?
+
+Here you can find the documentation of commands registered by the Add-On:
+
+https://enzyme-apd.github.io/archicad-api-dev/archicad-addon
+
 ## How to build?
 
 ### Prerequisites

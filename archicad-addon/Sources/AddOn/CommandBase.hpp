@@ -19,4 +19,4 @@ public:
 #endif
 };
 
-GS::ObjectState CreateErrorResponse (APIErrCodes errorCode, const char* errorMessage);
+GS::ObjectState CreateErrorResponse (GSErrCode errorCode, const char* errorMessage);

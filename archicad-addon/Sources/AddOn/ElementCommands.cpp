@@ -1,6 +1,5 @@
 #include "ElementCommands.hpp"
 #include "SchemaDefinitions.hpp"
-#include "ObjectState.hpp"
 
 GS::String GetSelectedElementsCommand::GetName () const
 {
@@ -34,7 +33,7 @@ GS::ObjectState GetSelectedElementsCommand::Execute (const GS::ObjectState& /*pa
     GS::Array<API_Neig> selectedNeigs;
     GSErrCode err = ACAPI_Selection_Get (&selectionInfo, &selectedNeigs, false);
     if (err != NoError && err != APIERR_NOSEL) {
-        return CreateErrorResponse (APIERR_GENERAL, "Failed to retrieve selected elements.");
+        return CreateErrorResponse (err, "Failed to retrieve selected elements.");
     }
 
     GS::ObjectState response;

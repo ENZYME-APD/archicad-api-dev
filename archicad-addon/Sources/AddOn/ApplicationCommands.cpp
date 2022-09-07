@@ -57,9 +57,9 @@ GS::Optional<GS::UniString> GetArchicadLocationCommand::GetResponseSchema () con
 GS::ObjectState GetArchicadLocationCommand::Execute (const GS::ObjectState& /*parameters*/, GS::ProcessControl& /*processControl*/) const
 {
     IO::Location applicationFileLocation;
-    GSErrCode error = IO::fileSystem.GetSpecialLocation (IO::FileSystem::ApplicationFile, &applicationFileLocation);
-    if (error != NoError) {
-        return CreateErrorResponse (APIERR_GENERAL, "Failed to get the location of the Archicad application!");
+    GSErrCode err = IO::fileSystem.GetSpecialLocation (IO::FileSystem::ApplicationFile, &applicationFileLocation);
+    if (err != NoError) {
+        return CreateErrorResponse (err, "Failed to get the location of the Archicad application!");
     }
     return GS::ObjectState ("archicadLocation", applicationFileLocation.ToDisplayText ());
 }

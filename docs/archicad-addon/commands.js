@@ -54,7 +54,6 @@
     {
         name : 'Project Commands',
         commands : [
-
             {
                 name : "GetProjectInfo",
                 version : "0.1.0",
@@ -111,6 +110,31 @@
                         "hotlinks"
                     ]
                 }
+            },
+            {
+                name : "PublishPublisherSet",
+                version : "0.1.0",
+                description : "Performs a publish operation on the currently opened project. Only the given publisher set will be published.",
+                inputScheme : {
+                    "type": "object",
+                    "properties": {
+                        "publisherSetName": {
+                            "type": "string",
+                            "description": "The name of the publisher set.",
+                            "minLength": 1
+                        },
+                        "outputPath": {
+                            "type": "string",
+                            "description": "Full local or LAN path for publishing. Optional, by default the path set in the settings of the publiser set will be used.",
+                            "minLength": 1
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "publisherSetName"
+                    ]
+                },
+                outputScheme : null
             },
         ]
     },

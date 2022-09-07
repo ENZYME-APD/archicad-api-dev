@@ -63,7 +63,7 @@ GS::ObjectState    PublishCommand::Execute (const GS::ObjectState& parameters, G
 
     const auto publisherSetNameGuidTable = GetPublisherSetNameGuidTable ();
     if (!publisherSetNameGuidTable.ContainsKey (publisherSetName)) {
-        return CreateErrorResponse (APIERR_BADNAME, "Not valid publisher set name.");
+        return CreateErrorResponse (Error, "Not valid publisher set name.");
     }
 
     API_PublishPars    publishPars = {};
@@ -80,25 +80,7 @@ GS::ObjectState    PublishCommand::Execute (const GS::ObjectState& parameters, G
     delete publishPars.path;
 
     if (err != NoError) {
-        return CreateErrorResponse (APIERR_COMMANDFAILED, "Publishing failed. Check output path!");
-    }
-
-    return {};
-}
-
-// --- TeamworkReceiveCommand ----------------------------------------------------------------------------------
-
-GS::String TeamworkReceiveCommand::GetName () const
-{
-    return "TeamworkReceive";
-}
-
-GS::ObjectState TeamworkReceiveCommand::Execute (const GS::ObjectState& /*parameters*/, GS::ProcessControl& /*processControl*/) const
-{
-    GSErrCode err = ACAPI_TeamworkControl_ReceiveChanges ();
-
-    if (err != NoError) {
-        return CreateErrorResponse (APIERR_SERVICEFAILED, "Receive failed. Check internet connection!");
+        return CreateErrorResponse (err, "Publishing failed. Check output path!");
     }
 
     return {};
@@ -116,7 +98,7 @@ GS::ObjectState ReloadLibrariesCommand::Execute (const GS::ObjectState& /*parame
     GSErrCode err = ACAPI_Automate (APIDo_ReloadLibrariesID);
 
     if (err != NoError) {
-        return CreateErrorResponse (APIERR_COMMANDFAILED, "Reloading Libraries failed. Check internet connection if you have active libraries from BIMcloud!");
+        return CreateErrorResponse (err, "Reloading Libraries failed. Check internet connection if you have active libraries from BIMcloud!");
     }
 
     return {};

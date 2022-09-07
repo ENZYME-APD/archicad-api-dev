@@ -6,6 +6,7 @@
 #include "ApplicationCommands.hpp"
 #include "ProjectCommands.hpp"
 #include "ElementCommands.hpp"
+#include "TeamworkCommands.hpp"
 #include "Commands.hpp"
 
 API_AddonType __ACDLL_CALL CheckEnvironment (API_EnvirParams* envir)

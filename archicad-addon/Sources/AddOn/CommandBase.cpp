@@ -1,9 +1,6 @@
 #include "CommandBase.hpp"
 
 constexpr const char* CommandNamespace = "TapirCommand";
-constexpr const char* ErrorResponseField = "error";
-constexpr const char* ErrorCodeResponseField = "code";
-constexpr const char* ErrorMessageResponseField = "message";
 
 GS::String CommandBase::GetNamespace () const
 {
@@ -22,17 +19,7 @@ GS::Optional<GS::UniString> CommandBase::GetInputParametersSchema () const
 
 GS::Optional<GS::UniString> CommandBase::GetResponseSchema () const
 {
-    return GS::UniString::Printf (R"({
-        "type": "object",
-        "properties": {
-            "%s": {
-                "$ref": "APITypes.json#/definitions/Error"
-            }
-        },
-        "additionalProperties": false,
-        "required": []
-    })",
-    ErrorResponseField);
+    return {};
 }
 
 void CommandBase::OnResponseValidationFailed (const GS::ObjectState& /*response*/) const
@@ -52,10 +39,10 @@ bool CommandBase::IsProcessWindowVisible () const
 }
 #endif
 
-GS::ObjectState CreateErrorResponse (APIErrCodes errorCode, const char* errorMessage)
+GS::ObjectState CreateErrorResponse (GSErrCode errorCode, const char* errorMessage)
 {
     GS::ObjectState error;
-    error.Add (ErrorCodeResponseField, errorCode);
-    error.Add (ErrorMessageResponseField, errorMessage);
-    return GS::ObjectState (ErrorResponseField, error);
+    error.Add ("code", errorCode);
+    error.Add ("message", errorMessage);
+    return GS::ObjectState ("error", error);
 }

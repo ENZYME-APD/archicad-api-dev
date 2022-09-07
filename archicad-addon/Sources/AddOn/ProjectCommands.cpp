@@ -1,6 +1,5 @@
 #include "ProjectCommands.hpp"
 #include "SchemaDefinitions.hpp"
-#include "ObjectState.hpp"
 
 GS::String GetProjectInfoCommand::GetName () const
 {
@@ -50,7 +49,7 @@ GS::ObjectState GetProjectInfoCommand::Execute (const GS::ObjectState& /*paramet
     GSErrCode err = ACAPI_Environment (APIEnv_ProjectID, &projectInfo);
 
     if (err != NoError) {
-        return CreateErrorResponse (APIERR_NOPLAN, "Failed to retrieve project information. Check the opened project!");
+        return CreateErrorResponse (err, "Failed to retrieve project information. Check the opened project!");
     }
 
     GS::ObjectState response;

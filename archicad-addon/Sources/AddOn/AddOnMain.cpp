@@ -5,6 +5,7 @@
 #include "ResourceIds.hpp"
 #include "ApplicationCommands.hpp"
 #include "ProjectCommands.hpp"
+#include "ElementCommands.hpp"
 #include "Commands.hpp"
 
 API_AddonType __ACDLL_CALL CheckEnvironment (API_EnvirParams* envir)
@@ -32,6 +33,7 @@ GSErrCode __ACENV_CALL Initialize (void)
     err |= ACAPI_Install_AddOnCommandHandler (GS::NewOwned<MoveElementsCommand> ());
     err |= ACAPI_Install_AddOnCommandHandler (GS::NewOwned<CreateColumnsCommand> ());
     err |= ACAPI_Install_AddOnCommandHandler (GS::NewOwned<GetHotlinksCommand> ());
+    err |= ACAPI_Install_AddOnCommandHandler (GS::NewOwned<GetSelectedElementsCommand> ());
 
     return err;
 }

@@ -1,4 +1,4 @@
-﻿var commands = [
+﻿var gCommands = [
     {
         name : 'Application Commands',
         commands : [
@@ -100,31 +100,6 @@
                 description : "Gets the file system locations (path) of the hotlink modules. The hotlinks can have tree hierarchy in the project.",
                 inputScheme : null,
                 outputScheme : {
-                    "Hotlinks": {
-                      "type": "array",
-                      "description": "A list of hotlink nodes.",
-                      "items": {
-                        "$ref": "#/Hotlink"
-                      }
-                    },
-                    "Hotlink": {
-                      "type": "object",
-                      "description": "The details of a hotlink node.",
-                      "properties": {
-                        "location": {
-                          "type": "string",
-                          "description": "The path of the hotlink file."
-                        },
-                        "children": {
-                          "$ref": "#/Hotlinks",
-                          "description": "The children of the hotlink node if it has any."
-                        }
-                      },
-                      "additionalProperties": false,
-                      "required": [
-                        "location"
-                      ]
-                    },
                     "type": "object",
                     "properties": {
                         "hotlinks": {
@@ -136,6 +111,29 @@
                         "hotlinks"
                     ]
                 }
+            },
+        ]
+    },
+    {
+        name : 'Element Commands',
+        commands : [
+            {
+                name : "GetSelectedElements",
+                version : "0.1.0",
+                description : "Gets the list of the currently selected elements.",
+                inputScheme : null,
+                outputScheme : {
+                    "type": "object",
+                    "properties": {
+                        "elements": {
+                            "$ref": "#/Elements"
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "elements"
+                    ]  
+                }              
             },
         ]
     }

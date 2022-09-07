@@ -11,7 +11,7 @@ function CreateElement (parentElement, elementType, className, innerHTML)
     return elem;
 }
 
-function ResolveReferences (schema, parentNode, parentKey, resolvedKeys)
+function ResolveReferences (schemaDefinitions, parentNode, parentKey, resolvedKeys)
 {
     let node = parentNode[parentKey];
     for (let key in node) {
@@ -20,10 +20,10 @@ function ResolveReferences (schema, parentNode, parentKey, resolvedKeys)
         }
         let childNode = node[key];
         if (typeof childNode === 'object') {
-            ResolveReferences (schema, node, key, resolvedKeys);
+            ResolveReferences (schemaDefinitions, node, key, resolvedKeys);
         } else if (typeof childNode === 'string' && key == '$ref') {
             let refKey = childNode.substr (2);
-            let refValue = schema[refKey];
+            let refValue = schemaDefinitions[refKey];
             if (resolvedKeys.has (refKey)) {
                 parentNode[parentKey] = {
                     type : refKey
@@ -32,26 +32,26 @@ function ResolveReferences (schema, parentNode, parentKey, resolvedKeys)
                 parentNode[parentKey] = refValue;
                 parentNode[parentKey].title = refKey;
                 resolvedKeys.add (refKey);
-                ResolveReferences (schema, parentNode, parentKey, resolvedKeys);
+                ResolveReferences (schemaDefinitions, parentNode, parentKey, resolvedKeys);
                 resolvedKeys.delete (refKey)
             }
         }
     }
 }
 
-function CreateSchemaElement (parentElement, title, schema)
+function CreateSchemaElement (parentElement, title, schema, schemaDefinitions)
 {
     if (schema === null) {
         return;
     }
     CreateElement (parentElement, 'div', 'scheme_title', title);    
     let schemeContainer = CreateElement (parentElement, 'div', 'scheme_container', null);
-    ResolveReferences (schema, schema, 'properties', new Set ());
+    ResolveReferences (schemaDefinitions, schema, 'properties', new Set ());
     let view = new JSONSchemaView (schema);
     schemeContainer.appendChild (view.render ());
 }
 
-function RenderCommand (parentElement, command)
+function RenderCommand (parentElement, command, schemaDefinitions)
 {
     let headerElement = CreateElement (parentElement, 'div', 'command_header', null);
     CreateElement (headerElement, 'span', 'command_name', command.name);
@@ -63,8 +63,8 @@ function RenderCommand (parentElement, command)
     headerElement.addEventListener ('click', () => {
         if (!isGenerated) {
             CreateElement (commandContent, 'div', 'command_description', command.description);
-            CreateSchemaElement (commandContent, 'Input parameters', command.inputScheme);
-            CreateSchemaElement (commandContent, 'Output parameters', command.outputScheme);
+            CreateSchemaElement (commandContent, 'Input parameters', command.inputScheme, schemaDefinitions);
+            CreateSchemaElement (commandContent, 'Output parameters', command.outputScheme, schemaDefinitions);
             isGenerated = true;
         }
         if (commandContent.style.display === 'block') {
@@ -75,13 +75,13 @@ function RenderCommand (parentElement, command)
     });
 }
 
-function RenderCommands (parentElement, commands)
+function RenderCommands (parentElement, commands, schemaDefinitions)
 {
     for (let group of commands) {
         CreateElement (parentElement, 'div', 'group_name', group.name);
         for (command of group.commands) {
             let commandContainer = CreateElement (parentElement, 'div', 'command_container', null);
-            RenderCommand (commandContainer, command);
+            RenderCommand (commandContainer, command, schemaDefinitions);
         }
     }
 }

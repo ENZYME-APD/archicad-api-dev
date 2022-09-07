@@ -1,4 +1,5 @@
 #include "ProjectCommands.hpp"
+#include "SchemaDefinitions.hpp"
 #include "ObjectState.hpp"
 
 GS::String GetProjectInfoCommand::GetName () const
@@ -77,33 +78,7 @@ GS::String GetHotlinksCommand::GetName () const
 
 GS::Optional<GS::UniString> GetHotlinksCommand::GetSchemaDefinitions () const
 {
-    return R"({
-        "Hotlinks": {
-          "type": "array",
-          "description": "A list of hotlink nodes.",
-          "items": {
-            "$ref": "#/Hotlink"
-          }
-        },
-        "Hotlink": {
-          "type": "object",
-          "description": "The details of a hotlink node.",
-          "properties": {
-            "location": {
-              "type": "string",
-              "description": "The path of the hotlink file."
-            },
-            "children": {
-              "$ref": "#/Hotlinks",
-              "description": "The children of the hotlink node if it has any."
-            }
-          },
-          "additionalProperties": false,
-          "required": [
-            "location"
-          ]
-        }
-    })";
+    return GetCommonSchemaDefinitions ();
 }
 
 GS::Optional<GS::UniString> GetHotlinksCommand::GetResponseSchema () const

@@ -9,9 +9,15 @@ html, body
 	padding: 0px;
 }
 
+p
+{
+    line-height: 1.5em;
+}
+
 div.header
 {
     box-shadow: 0px 0px 10px #dddddd;
+    margin-bottom: 30px;
 }
 
 div.header_frame
@@ -91,6 +97,12 @@ div.scheme_title
 div.scheme_container
 {
     
+}
+
+code.language-python.hljs
+{
+    background: transparent;
+    border: 1px dotted #dddddd;
 }
 
 @media only screen and (max-width: 1000px)

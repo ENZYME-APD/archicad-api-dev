@@ -111,11 +111,22 @@ class Command(dotNETBase):
     def __str__(self):
         return 'Generic Command Object'
 
+    #region Basic Commands
     def IsAlive(self):
         cmd = {'command' : 'API.IsAlive'}
         response = self.link.post(cmd)
         return response.success
 
+    def GetProductInfo(self):
+        cmd = {'command' : 'API.GetProductInfo'}
+        response = self.link.post(cmd)
+        if response.success:
+            return response.result["version"], response.result["buildNumber"], response.result["languageCode"]
+        else:
+            raise response.exception
+    #endregion Basic Commands
+
+    #region Element Listing Commands
     def GetAllElements(self):
         cmd = {'command' : 'API.GetAllElements'}
         response = self.link.post(cmd)
@@ -124,32 +135,36 @@ class Command(dotNETBase):
         else:
             raise response.exception
 
-    def GetElementsByType(self, elementType):
+    def GetElementsByType(self, element_type):
         
         for item in Element._TYPES:
-            if item.lower() == elementType.lower():
-                elementType = item
+            if item.lower() == element_type.lower():
+                element_type = item
                 break
         else:
-            raise TypeError("Couldn't find element type: {}".format(elementType))
+            raise TypeError("Couldn't find element type: {}".format(element_type))
         
         cmd = { 'command' : 'API.GetElementsByType',
-                'parameters' : {'elementType': elementType}
+                'parameters' : {'elementType': element_type}
                 }
         response = self.link.post(cmd)
         if response.success:
             return response.elements()
         else:
             raise response.exception
-        
-    def GetProductInfo(self):
-        cmd = {'command' : 'API.GetProductInfo'}
+
+    def GetElementsByClassification(self, classification_system_id):
+        cmd = { 'command' : 'API.GetElementsByClassification',
+                'parameters' : { 'classificationSystemId' : {'guid' : classification_system_id}}
+                }
         response = self.link.post(cmd)
         if response.success:
-            return response.result["version"], response.result["buildNumber"], response.result["languageCode"]
+            return response.elements()
         else:
             raise response.exception
+    #endregion Element Listing Commands
 
+    #region Classification Commands
     def GetAllClassificationSystems(self):
         cmd = {'command' : 'API.GetAllClassificationSystems'}
         response = self.link.post(cmd)
@@ -157,3 +172,4 @@ class Command(dotNETBase):
             return response.classification_systems()
         else:
             raise response.exception
+    #endregion Classification Commands

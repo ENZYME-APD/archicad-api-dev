@@ -1,7 +1,7 @@
 #!/usr/bin/env python27
 # -*- coding: utf-8 -*-
 
-__all__ = ['Element']
+__all__ = ['Element', 'ClassificationSystem']
 
 # - - - - - - - - BUILT-IN IMPORTS
 
@@ -28,8 +28,8 @@ class Element(dotNETBase):
         id = json_data.get('elementId', {}).get('guid', '')
         if id: return cls(id)
     
-    @classmethod
-    def from_command_result(cls, result):
+    @staticmethod
+    def from_command_result(result):
         return [Element.FromDictionary(data) for data in result.get('elements', [])]
 
     def __str__(self):
@@ -45,19 +45,29 @@ class ClassificationSystem(dotNETBase):
         self.version = version
         self.date = date
     
+    def ToDictionary(self):
+        return {"classificationSystemId" : {"guid" : self.guid},
+                "name" : self.name,
+                "description" : self.description,
+                "version" : self.version,
+                "date" : self.date}
+
     @classmethod
     def FromDictionary(cls, json_data):
-        json_data = json_data.get('classificationSystemId', {})
-        id = json_data.get('guid')
-        
-        
-        
-        
-        
-        return super().FromDictionary(json_data)
+        if isinstance(json_data, dict):
+            guid = json_data.get('classificationSystemId', {}).get('guid')
+            name = json_data.get('name')
+            description = json_data.get('description')
+            source = json_data.get('source')
+            version = json_data.get('version')
+            date = json_data.get('date')
+            return cls(guid, name, description, source, version, date)
+        else:
+            raise ValueError('json_data must be a dictionary')
 
-    def from_command_result(self, result):
-        pass
+    @staticmethod
+    def from_command_result(result):
+        return [ClassificationSystem.FromDictionary(data) for data in result.get('classificationSystems', [])]
 
     def __str__(self):
-        return '<{}:{}>'.format(self.GetType(), self.guid)
+        return '<{}:{}>'.format(self.GetType(), self.name)

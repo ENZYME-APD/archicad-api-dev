@@ -4,6 +4,27 @@ This is the source code of an Archicad Add-On that registers several additional 
 
 ## How to use?
 
+### Download
+
+Download the latest version here:
+- [Archicad 25 (Windows)](https://github.com/ENZYME-APD/archicad-api-dev/releases/latest/download/TapirAddOn_AC25_Win.apx)
+- [Archicad 26 (Windows)](https://github.com/ENZYME-APD/archicad-api-dev/releases/latest/download/TapirAddOn_AC26_Win.apx)
+- [Archicad 25 (Mac)](https://github.com/ENZYME-APD/archicad-api-dev/releases/latest/download/TapirAddOn_AC25_Mac.dmg)
+- [Archicad 26 (Mac)](https://github.com/ENZYME-APD/archicad-api-dev/releases/latest/download/TapirAddOn_AC26_Mac.dmg)
+
+### Install
+
+Once you downloaded the Add-On files you have to install it in Archicad. Follow these steps to install the Add-On.
+
+1. Place the downloaded file somewhere on your computer.
+2. In Archicad run the command "Options > Add-On Manager".
+3. Open the "Edit List of Available Add-Ons" tabpage, and click on the "Add" button.
+4. Browse the downloaded Add-On file.
+5. Click "OK" in the Add-On Manager.
+
+**Important note for Mac users:** The Add-On is not properly signed at the moment, so once you try to load the Add-On a warning will appear on the screen. You can ignore this warning, but after doing the process above go to Security Settings, allow the Add-On file to run and restart Archicad.
+
+### Documentation
 Here you can find the documentation of commands registered by the Add-On:
 
 https://enzyme-apd.github.io/archicad-api-dev/archicad-addon
@@ -13,10 +34,10 @@ https://enzyme-apd.github.io/archicad-api-dev/archicad-addon
 ### Prerequisites
 
 You should install some prerequisites to build the Add-On:
-- [Visual Studio 2019 or later](https://visualstudio.microsoft.com/downloads):
-- [Archicad API Development Kit](https://archicadapi.graphisoft.com) for the target version
-- [CMake](https://cmake.org) for generating the project file (3.16+)
-- [Python](https://www.python.org) for resource compilation (2.7+ or 3.8+)
+- [Visual Studio 2019 or later](https://visualstudio.microsoft.com/downloads).
+- [Archicad API Development Kit](https://archicadapi.graphisoft.com) for the target version.
+- [CMake](https://cmake.org) for generating the project file (3.16+).
+- [Python](https://www.python.org) for resource compilation (2.7+ or 3.8+).
 
 ### Generate the project and build
 

@@ -13,8 +13,8 @@ else:
     from urllib2 import urlopen, Request
 
 # - - - - - - - - LOCAL IMPORTS
-from archicad.utility import dotNETBase
-from archicad.members import Element, ClassificationSystem
+from archicad.utility import dotNETBase, JsonExtensions
+from archicad.members import Element, ClassificationSystem, BoundingBox
 
 # - - - - - - - - CLASS LIBRARY
 
@@ -67,17 +67,21 @@ class Link(dotNETBase):
 class CommandResult(dotNETBase):
     
     def __init__(self, response):
-        self._data = json.loads(response) #TODO: Check if deepcopy is necessary here
+        #TODO: Check if deepcopy is necessary here
+        self._data = json.loads(response, object_hook=JsonExtensions.strip_unicode)
         self.success = self._data.get('succeeded')
         self.result = self._data.get('result', {})
         self.error = self._data.get('error', {})
 
+    def bounding_box(self):
+        return BoundingBox.from_command_result(self.result)
+    
     def classification_systems(self):
         return ClassificationSystem.from_command_result(self.result)
     
     def exception(self):
-        if self.error is None:
-            return ConnectionError('{}:\n{}'.format(self.error['code'], self.error['message']))
+        if self.error is not None:
+            return Exception('{}:\n{}'.format(self.error['code'], self.error['message']))
 
     def elements(self):
         return Element.from_command_result(self.result)
@@ -90,11 +94,14 @@ class Parameter(dotNETBase):
     @staticmethod
     def pack(self, parameters):
         if all([isinstance(param, Parameter) for param in parameters]):
-            return {'parameter': parameters}
+            return {'parameters': parameters}
     
     def __init__(self, key, value):
         self.key = key
         self.value = value
+    
+    def ToDictionary(self):
+        return {'parameters' : {self.key: self.value}}
     
     def __str__(self):
         return '<{} : {}>'.format(self.key, self.value)
@@ -109,7 +116,7 @@ class Command(dotNETBase):
         self.link = link
 
     def __str__(self):
-        return 'Generic Command Object'
+        return 'ArchiCAD Command Object'
 
     #region Basic Commands
     def IsAlive(self):
@@ -123,7 +130,7 @@ class Command(dotNETBase):
         if response.success:
             return response.result["version"], response.result["buildNumber"], response.result["languageCode"]
         else:
-            raise response.exception
+            raise response.exception()
     #endregion Basic Commands
 
     #region Element Listing Commands
@@ -133,7 +140,7 @@ class Command(dotNETBase):
         if response.success:
             return response.elements()
         else:
-            raise response.exception
+            raise response.exception()
 
     def GetElementsByType(self, element_type):
         
@@ -151,7 +158,7 @@ class Command(dotNETBase):
         if response.success:
             return response.elements()
         else:
-            raise response.exception
+            raise response.exception()
 
     def GetElementsByClassification(self, classification_system_id):
         cmd = { 'command' : 'API.GetElementsByClassification',
@@ -161,7 +168,7 @@ class Command(dotNETBase):
         if response.success:
             return response.elements()
         else:
-            raise response.exception
+            raise response.exception()
     #endregion Element Listing Commands
 
     #region Classification Commands
@@ -171,5 +178,33 @@ class Command(dotNETBase):
         if response.success:
             return response.classification_systems()
         else:
-            raise response.exception
+            raise response.exception()
     #endregion Classification Commands
+
+    #region Element Geometry Commands
+    def Get2DBoundingBoxes(self, elements):
+        element_list = []
+        for element in elements:
+            element_list.append(element.ToDictionary())
+        
+        cmd = {'command' : 'API.Get2DBoundingBoxes'}
+        cmd.update(Parameter('elements', element_list).ToDictionary())
+        response = self.link.post(cmd)
+        if response.success:
+            return response.bounding_box()
+        else:
+            raise response.exception()
+    
+    def Get3DBoundingBoxes(self, elements):
+        element_list = []
+        for element in elements:
+            element_list.append(element.ToDictionary())
+        
+        cmd = {'command' : 'API.Get3DBoundingBoxes'}
+        cmd.update(Parameter('elements', element_list).ToDictionary())
+        response = self.link.post(cmd)
+        if response.success:
+            return response.bounding_box()
+        else:
+            raise response.exception()
+    #endregion Element Geometry Commands
